@@ -2711,21 +2711,21 @@ function pinAnnouncement(thread_id, type, csrf_token) {
     }
 }
 
-function handle_newPost() {
-    const post_list = document.getElementById('posts_list');
-    const captureChange = new MutationObserver((mutationList, _) => {
-        for (let mut of mutationList) {
-            if (mut.type === 'childList'){
-                mut.addedNodes.forEach(node => {
+function handleNewPost() {
+    const postList = document.getElementById('posts_list');
+    const observer = new MutationObserver((mutations) => {
+        mutations.forEach(({ type, addedNodes }) => {
+            if (type === 'childList') {
+                addedNodes.forEach(node => {
                     if (node.nodeType === Node.ELEMENT_NODE) {
-                        node.classList.add('new_post')
-                    };
+                        node.classList.add('new_post');
+                    }
                 });
             }
-        }
+        });
     });
-    captureChange.observe(post_list, { childList: true});
+
+    observer.observe(postList, { childList: true });
 }
-setTimeout(function() {
-    handle_newPost();
-}, 100);
+
+setTimeout(handleNewPost, 100);
